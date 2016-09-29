@@ -5,6 +5,11 @@ var ReactDOMServer = (typeof window !== "undefined" ? window['React'] : typeof g
 var KendoTemplate = function (component) {
   return ReactDOMServer.renderToStaticMarkup(component);
 };
+KendoTemplate.wrap = function (component) {
+  return function (props) {
+    return KendoTemplate(component(props));
+  };
+};
 
 module.exports = KendoTemplate;
 
@@ -127,7 +132,7 @@ var KendoWidgetMixin = function (widget) {
      * Default Kendo widget renderer
      */
     render: function () {
-      var other = _.omit(this.props, [ 'options', 'children', 'tag' ]);
+      var other = _.omit(this.props, [ 'options', 'children', 'tag', 'debug', 'reactive' ]);
       return React.DOM[this.props.tag](other, this.props.children);
     }
   };
@@ -142,7 +147,7 @@ var _ = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefi
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var KendoWidgetMixin = require('./KendoWidgetMixin');
 var widgetMixins = require('./widgets');
-var kendo = global.kendo;
+var kendo = global.kendo || (typeof window !== "undefined" ? window['kendo'] : typeof global !== "undefined" ? global['kendo'] : null);
 
 if (!kendo || !kendo.ui) {
   throw new Error('kendo.ui not found');
@@ -197,14 +202,14 @@ var Grid = {
    * @param group draggable group
    * @param options
    */
-  enableDraggableRows: function (group, options) { 
+  enableDraggableRows: function (group, options) {
     this.getWidget().table.kendoDraggable(_.defaults(options || { }, {
       filter: 'tbody > tr',
       group: group,
       cursorOffset: {
         top: 0,
         left: 0
-      },  
+      },
       hint: function (e) {
         // XXX clean up
         return $('<div class="k-grid k-widget"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
