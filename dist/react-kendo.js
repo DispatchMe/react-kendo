@@ -20,6 +20,7 @@ module.exports = KendoTemplate;
 
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactDOM = (typeof window !== "undefined" ? window['ReactDOM'] : typeof global !== "undefined" ? global['ReactDOM'] : null);
+var PropTypes = (typeof window !== "undefined" ? window['PropTypes'] : typeof global !== "undefined" ? global['PropTypes'] : null);
 var _ = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefined" ? global['_'] : null);
 var reactTags = _.keys(React.DOM);
 
@@ -37,9 +38,9 @@ var KendoWidgetMixin = function (widget) {
   return {
 
     propTypes: {
-      options: React.PropTypes.object,
-      debug: React.PropTypes.bool,
-      tag: React.PropTypes.oneOf(reactTags).isRequired
+      options: PropTypes.object,
+      debug: PropTypes.bool,
+      tag: PropTypes.oneOf(reactTags).isRequired
     },
 
     getDefaultProps: function () {
@@ -145,6 +146,7 @@ module.exports = KendoWidgetMixin;
 (function (global){
 var _ = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefined" ? global['_'] : null);
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
+var createReactClass = (typeof window !== "undefined" ? window['createReactClass'] : typeof global !== "undefined" ? global['createReactClass'] : null);
 var KendoWidgetMixin = require('./KendoWidgetMixin');
 var widgetMixins = require('./widgets');
 var kendo = global.kendo || (typeof window !== "undefined" ? window['kendo'] : typeof global !== "undefined" ? global['kendo'] : null);
@@ -164,7 +166,7 @@ function buildComponent (widget, name, prefix) {
   if (widgetMixins[name]) {
     mixins.push(widgetMixins[name]);
   }
-  return React.createClass({
+  return createReactClass({
     mixins: mixins
   });
 }
@@ -202,14 +204,14 @@ var Grid = {
    * @param group draggable group
    * @param options
    */
-  enableDraggableRows: function (group, options) {
+  enableDraggableRows: function (group, options) { 
     this.getWidget().table.kendoDraggable(_.defaults(options || { }, {
       filter: 'tbody > tr',
       group: group,
       cursorOffset: {
         top: 0,
         left: 0
-      },
+      },  
       hint: function (e) {
         // XXX clean up
         return $('<div class="k-grid k-widget"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
