@@ -22,7 +22,6 @@ var React = (typeof window !== "undefined" ? window['React'] : typeof global !==
 var ReactDOM = (typeof window !== "undefined" ? window['ReactDOM'] : typeof global !== "undefined" ? global['ReactDOM'] : null);
 var PropTypes = (typeof window !== "undefined" ? window['PropTypes'] : typeof global !== "undefined" ? global['PropTypes'] : null);
 var _ = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefined" ? global['_'] : null);
-var reactTags = _.keys(ReactDOM);
 
 function mountKendoWidget (component, widget) {
   component.$elem[widget](component.props.options);
@@ -40,7 +39,7 @@ var KendoWidgetMixin = function (widget) {
     propTypes: {
       options: PropTypes.object,
       debug: PropTypes.bool,
-      tag: PropTypes.oneOf(reactTags).isRequired
+      tag: PropTypes.string.isRequired
     },
 
     getDefaultProps: function () {
