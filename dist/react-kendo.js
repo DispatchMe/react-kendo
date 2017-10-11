@@ -22,7 +22,7 @@ var React = (typeof window !== "undefined" ? window['React'] : typeof global !==
 var ReactDOM = (typeof window !== "undefined" ? window['ReactDOM'] : typeof global !== "undefined" ? global['ReactDOM'] : null);
 var PropTypes = (typeof window !== "undefined" ? window['PropTypes'] : typeof global !== "undefined" ? global['PropTypes'] : null);
 var _ = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefined" ? global['_'] : null);
-var reactTags = _.keys(React.DOM);
+var reactTags = _.keys(ReactDOM);
 
 function mountKendoWidget (component, widget) {
   component.$elem[widget](component.props.options);
@@ -134,7 +134,7 @@ var KendoWidgetMixin = function (widget) {
      */
     render: function () {
       var other = _.omit(this.props, [ 'options', 'children', 'tag', 'debug', 'reactive' ]);
-      return React.DOM[this.props.tag](other, this.props.children);
+      return React.createElement(this.props.tag, other, this.props.children);
     }
   };
 };
